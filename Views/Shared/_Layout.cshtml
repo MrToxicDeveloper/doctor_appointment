@@ -1,0 +1,268 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MediCare Appointment Booking</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light-subtle">
+
+    <!-- Top Announcement Bar -->
+    <div class="top-bar bg-primary text-white py-1 small">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <i class="bi bi-clock me-1"></i> Mon - Sat: 8:00 AM - 8:00 PM &nbsp;|&nbsp;
+                <i class="bi bi-geo-alt me-1"></i> Medical Enclave, Health City
+            </div>
+            <div>
+                <i class="bi bi-telephone-fill me-1"></i> Emergency Hotline: <strong>+91 98765 43210</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="sticky-top shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center text-primary fw-bold fs-4" asp-controller="Home" asp-action="Index">
+                    <span class="brand-icon me-2 d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle">
+                        <i class="bi bi-heart-pulse-fill"></i>
+                    </span>
+                    <span>Medi<span class="text-teal">Care</span></span>
+                </a>
+                
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMediCare" 
+                        aria-controls="navbarMediCare" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarMediCare">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-semibold">
+                        <li class="nav-item">
+                            <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")" 
+                               asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door me-1"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Doctors" ? "active" : "")" 
+                               asp-controller="Doctors" asp-action="Index">
+                                <i class="bi bi-person-badge me-1"></i> Doctors
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Appointments" && ViewContext.RouteData.Values["Action"]?.ToString() == "Book" ? "active" : "")" 
+                               asp-controller="Appointments" asp-action="Book">
+                                <i class="bi bi-calendar-plus me-1"></i> Book Appointment
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Appointments" && ViewContext.RouteData.Values["Action"]?.ToString() == "MyAppointments" ? "active" : "")" 
+                               asp-controller="Appointments" asp-action="MyAppointments">
+                                <i class="bi bi-calendar-check me-1"></i> My Appointments
+                            </a>
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-primary fw-bold px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Admin" ? "active" : "")" 
+                                   href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-shield-lock-fill me-1"></i> Admin Portal
+                                </a>
+                                <ul class="dropdown-menu shadow border-0">
+                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="Index"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="Appointments"><i class="bi bi-card-checklist me-2"></i>All Appointments</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="Doctors"><i class="bi bi-people me-2"></i>Manage Doctors</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="CreateDoctor"><i class="bi bi-person-plus me-2"></i>Add Doctor</a></li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+
+                    <!-- Right Side Auth Links -->
+                    <div class="d-flex align-items-center gap-2">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <div class="dropdown">
+                                <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle"></i>
+                                    <span>@User.Identity?.Name</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li><span class="dropdown-item-text text-muted small"><i class="bi bi-shield-check text-success me-1"></i>Role: Administrator</span></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Index"><i class="bi bi-grid-fill me-2"></i>Admin Dashboard</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Appointments"><i class="bi bi-calendar2-range me-2"></i>Appointments</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Admin" asp-action="Doctors"><i class="bi bi-hospital me-2"></i>Doctors</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                    }
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <a class="btn btn-outline-primary px-3 rounded-pill" asp-controller="Account" asp-action="Login">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                            </a>
+                            <a class="btn btn-primary px-3 rounded-pill" asp-controller="Appointments" asp-action="Book">
+                                <i class="bi bi-calendar-event me-1"></i> Book Now
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Global Toast / Alert Notifications -->
+    <div class="container mt-3">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show shadow-sm d-flex align-items-center" role="alert">
+                <i class="bi bi-check-circle-fill fs-5 me-2"></i>
+                <div>@TempData["SuccessMessage"]</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm d-flex align-items-center" role="alert">
+                <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
+                <div>@TempData["ErrorMessage"]</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["InfoMessage"] != null)
+        {
+            <div class="alert alert-info alert-dismissible fade show shadow-sm d-flex align-items-center" role="alert">
+                <i class="bi bi-info-circle-fill fs-5 me-2"></i>
+                <div>@TempData["InfoMessage"]</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    </div>
+
+    <!-- Main Content Area -->
+    <main role="main" class="flex-grow-1">
+        @RenderBody()
+    </main>
+
+    <!-- Professional Healthcare Footer -->
+    <footer class="site-footer bg-dark text-white pt-5 pb-3 mt-5">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Brand & About -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="brand-icon me-2 d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle">
+                            <i class="bi bi-heart-pulse-fill"></i>
+                        </span>
+                        <span class="fs-4 fw-bold">Medi<span class="text-teal">Care</span></span>
+                    </div>
+                    <p class="text-secondary small leading-relaxed">
+                        MediCare is a state-of-the-art doctor appointment booking system designed to connect patients with certified, experienced healthcare specialists quickly, securely, and seamlessly.
+                    </p>
+                    <div class="d-flex gap-3 text-secondary mt-3">
+                        <span class="social-badge"><i class="bi bi-facebook"></i></span>
+                        <span class="social-badge"><i class="bi bi-twitter-x"></i></span>
+                        <span class="social-badge"><i class="bi bi-linkedin"></i></span>
+                        <span class="social-badge"><i class="bi bi-instagram"></i></span>
+                    </div>
+                </div>
+
+                <!-- Quick Navigation -->
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="text-uppercase fw-bold text-teal mb-3">Quick Links</h6>
+                    <ul class="list-unstyled footer-links small">
+                        <li class="mb-2"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="mb-2"><a asp-controller="Doctors" asp-action="Index">Our Specialists</a></li>
+                        <li class="mb-2"><a asp-controller="Appointments" asp-action="Book">Book Appointment</a></li>
+                        <li class="mb-2"><a asp-controller="Appointments" asp-action="MyAppointments">My Appointments</a></li>
+                        <li class="mb-2"><a asp-controller="Account" asp-action="Login">Admin Login</a></li>
+                    </ul>
+                </div>
+
+                <!-- Clinical Services -->
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="text-uppercase fw-bold text-teal mb-3">Specializations</h6>
+                    <ul class="list-unstyled footer-links small">
+                        <li class="mb-2"><i class="bi bi-chevron-right text-teal me-1"></i> Cardiology & Heart Care</li>
+                        <li class="mb-2"><i class="bi bi-chevron-right text-teal me-1"></i> Dermatology & Skin Care</li>
+                        <li class="mb-2"><i class="bi bi-chevron-right text-teal me-1"></i> General Medicine</li>
+                        <li class="mb-2"><i class="bi bi-chevron-right text-teal me-1"></i> Pediatrics & Child Care</li>
+                        <li class="mb-2"><i class="bi bi-chevron-right text-teal me-1"></i> Orthopedic & Joint Surgery</li>
+                    </ul>
+                </div>
+
+                <!-- Clinic Information -->
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="text-uppercase fw-bold text-teal mb-3">Contact & Clinic</h6>
+                    <ul class="list-unstyled footer-contact small text-secondary">
+                        <li class="mb-2 d-flex">
+                            <i class="bi bi-geo-alt-fill text-teal me-2 mt-1"></i>
+                            <span>MediCare Health Plaza, 42 Health Boulevard, Tech City</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <i class="bi bi-telephone-fill text-teal me-2 mt-1"></i>
+                            <span>+91 98765 43210 / 011-2345678</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <i class="bi bi-envelope-fill text-teal me-2 mt-1"></i>
+                            <span>appointments@medicare-clinic.com</span>
+                        </li>
+                        <li class="mb-2 d-flex">
+                            <i class="bi bi-clock-fill text-teal me-2 mt-1"></i>
+                            <span>OPD: Mon - Sat (8:00 AM - 8:00 PM)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="border-secondary opacity-25 my-4" />
+
+            <div class="row align-items-center small text-secondary">
+                <div class="col-md-6 text-center text-md-start">
+                    &copy; @DateTime.UtcNow.Year <strong>MediCare</strong>. All Rights Reserved. Built for College Project Demonstration.
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                    <span class="badge bg-secondary-subtle text-light border border-secondary">ASP.NET Core MVC &bull; EF Core &bull; SQL Server LocalDB</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

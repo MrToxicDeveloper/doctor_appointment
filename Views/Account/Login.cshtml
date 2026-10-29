@@ -1,0 +1,89 @@
+@model MediCare.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Account Login";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-5">
+            <div class="form-card">
+                <div class="text-center mb-4">
+                    <span class="brand-icon d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle mb-2" style="width: 48px; height: 48px; font-size: 1.5rem;">
+                        <i class="bi bi-heart-pulse-fill"></i>
+                    </span>
+                    <h3 class="fw-bold mb-1">Welcome to MediCare</h3>
+                    <p class="text-muted small">Sign in to manage appointments or access the admin control panel.</p>
+                </div>
+
+                <!-- One-click Demo Admin Helper -->
+                <div class="alert alert-primary border-primary-subtle rounded-3 p-3 mb-4 small">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <strong class="text-primary"><i class="bi bi-key-fill me-1"></i> Demo Admin Credentials:</strong>
+                        <button type="button" class="btn btn-sm btn-primary rounded-pill py-0 px-2" id="fillAdminBtn" style="font-size: 0.75rem;">
+                            Fill Admin Credentials
+                        </button>
+                    </div>
+                    <div class="text-secondary font-monospace" style="font-size: 0.8rem;">
+                        Email: <strong>admin@medicare.com</strong><br />
+                        Password: <strong>Admin@123MediCare!</strong>
+                    </div>
+                </div>
+
+                <form asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm mb-3"></div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                            <input asp-for="Email" id="loginEmail" class="form-control" placeholder="name@example.com" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                            <input asp-for="Password" id="loginPassword" class="form-control" type="password" placeholder="••••••••" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            <label asp-for="RememberMe" class="form-check-label small text-muted">Remember me</label>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary rounded-pill py-2">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                        </button>
+                    </div>
+
+                    <div class="text-center text-muted small">
+                        Don't have an account? 
+                        <a asp-action="Register" class="text-primary fw-semibold text-decoration-none">Register as Patient</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('fillAdminBtn')?.addEventListener('click', function() {
+            document.getElementById('loginEmail').value = 'admin@medicare.com';
+            document.getElementById('loginPassword').value = 'Admin@123MediCare!';
+        });
+    </script>
+}

@@ -1,0 +1,108 @@
+@model MediCare.Models.Appointment
+@{
+    ViewData["Title"] = "Appointment Confirmed";
+}
+
+<div class="container py-5">
+    <div class="receipt-card">
+        <!-- Success Header -->
+        <div class="text-center mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center bg-success text-white rounded-circle mb-3 shadow" style="width: 72px; height: 72px;">
+                <i class="bi bi-check-lg display-5"></i>
+            </div>
+            <h3 class="fw-bold text-success mb-1">Appointment Booked Successfully!</h3>
+            <p class="text-muted small">Your appointment reference has been generated and saved to the database.</p>
+            <span class="badge bg-primary fs-6 px-3 py-2 rounded-pill">
+                Booking ID: #MED-@Model.Id.ToString("D4")
+            </span>
+        </div>
+
+        <!-- Receipt Details Table -->
+        <div class="card border bg-light-subtle rounded-3 p-4 mb-4">
+            <h6 class="text-uppercase fw-bold text-teal mb-3 border-bottom pb-2">
+                <i class="bi bi-receipt me-1"></i> Consultation Summary
+            </h6>
+
+            <div class="row g-3 small">
+                <div class="col-sm-6">
+                    <span class="text-muted d-block">Doctor Name</span>
+                    <strong class="fs-6 text-dark">@Model.Doctor?.Name</strong>
+                    <div class="text-teal">@Model.Doctor?.Specialization</div>
+                </div>
+
+                <div class="col-sm-6">
+                    <span class="text-muted d-block">Consultation Fee</span>
+                    <strong class="fs-6 text-primary">₹@Model.Doctor?.ConsultationFee.ToString("N0")</strong>
+                    <div class="text-muted">Payable at clinic desk</div>
+                </div>
+
+                <div class="col-sm-6 border-top pt-2">
+                    <span class="text-muted d-block">Appointment Date</span>
+                    <strong class="text-dark"><i class="bi bi-calendar-event text-primary me-1"></i>@Model.AppointmentDate.ToString("dddd, dd MMMM yyyy")</strong>
+                </div>
+
+                <div class="col-sm-6 border-top pt-2">
+                    <span class="text-muted d-block">Scheduled Time Slot</span>
+                    <strong class="text-dark"><i class="bi bi-clock text-teal me-1"></i>@Model.AppointmentTime</strong>
+                </div>
+
+                <div class="col-sm-6 border-top pt-2">
+                    <span class="text-muted d-block">Patient Full Name</span>
+                    <strong class="text-dark">@Model.PatientName</strong>
+                </div>
+
+                <div class="col-sm-6 border-top pt-2">
+                    <span class="text-muted d-block">Contact Phone</span>
+                    <span class="text-dark">@Model.PatientPhone</span>
+                </div>
+
+                <div class="col-sm-6 border-top pt-2">
+                    <span class="text-muted d-block">Registered Email</span>
+                    <span class="text-dark">@Model.PatientEmail</span>
+                </div>
+
+                <div class="col-sm-6 border-top pt-2">
+                    <span class="text-muted d-block">Booking Status</span>
+                    @if (Model.Status == "Confirmed")
+                    {
+                        <span class="badge badge-status-confirmed">Confirmed</span>
+                    }
+                    else if (Model.Status == "Cancelled")
+                    {
+                        <span class="badge badge-status-cancelled">Cancelled</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-status-pending">Pending Approval</span>
+                    }
+                </div>
+
+                <div class="col-12 border-top pt-2">
+                    <span class="text-muted d-block">Reason for Consultation</span>
+                    <span class="text-dark">@Model.Reason</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Information Note -->
+        <div class="alert alert-info small border-0 bg-info-subtle text-info-emphasis d-flex align-items-center mb-4">
+            <i class="bi bi-info-circle-fill fs-5 me-2"></i>
+            <div>
+                Please arrive at the clinic 15 minutes before your scheduled slot. Quote appointment reference <strong>#MED-@Model.Id.ToString("D4")</strong> at reception.
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <button onclick="window.print()" class="btn btn-outline-dark rounded-pill px-4">
+                <i class="bi bi-printer me-1"></i> Print Receipt
+            </button>
+            <a asp-controller="Appointments" asp-action="MyAppointments" asp-route-email="@Model.PatientEmail" class="btn btn-teal rounded-pill px-4">
+                <i class="bi bi-calendar-check me-1"></i> My Appointments
+            </a>
+            <a asp-controller="Appointments" asp-action="Book" class="btn btn-primary rounded-pill px-4">
+                <i class="bi bi-plus-circle me-1"></i> Book Another
+            </a>
+        </div>
+    </div>
+</div>

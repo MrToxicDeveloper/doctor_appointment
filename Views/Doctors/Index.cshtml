@@ -1,0 +1,135 @@
+@model MediCare.ViewModels.DoctorFilterViewModel
+@{
+    ViewData["Title"] = "Our Doctors & Specialists";
+}
+
+<div class="bg-primary-subtle py-4 border-bottom">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 class="fw-bold text-dark mb-1">Our Doctors & Specialists</h2>
+                <p class="text-muted mb-0">Browse through our panel of verified healthcare experts.</p>
+            </div>
+            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                <a asp-controller="Appointments" asp-action="Book" class="btn btn-primary rounded-pill">
+                    <i class="bi bi-calendar-plus me-1"></i> Quick Appointment
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <!-- Search and Filter Form -->
+    <div class="card border-0 shadow-sm p-3 mb-4 rounded-4 bg-white">
+        <form method="get" asp-controller="Doctors" asp-action="Index" class="row g-2 align-items-center">
+            <div class="col-lg-5 col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="searchTerm" class="form-control border-start-0 bg-light" 
+                           placeholder="Search by doctor name or specialization..." value="@Model.SearchTerm" />
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <select name="specialization" class="form-select bg-light">
+                    <option value="">All Specializations</option>
+                    @foreach (var spec in Model.AllSpecializations)
+                    {
+                        if (Model.Specialization == spec)
+                        {
+                            <option value="@spec" selected>@spec</option>
+                        }
+                        else
+                        {
+                            <option value="@spec">@spec</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-1 rounded-pill">
+                    <i class="bi bi-funnel me-1"></i> Filter
+                </button>
+                @if (!string.IsNullOrEmpty(Model.SearchTerm) || !string.IsNullOrEmpty(Model.Specialization))
+                {
+                    <a asp-controller="Doctors" asp-action="Index" class="btn btn-outline-secondary rounded-pill" title="Reset filter">
+                        <i class="bi bi-x-circle"></i> Reset
+                    </a>
+                }
+            </div>
+        </form>
+    </div>
+
+    <!-- Active Filter Badge Info -->
+    @if (!string.IsNullOrEmpty(Model.SearchTerm) || !string.IsNullOrEmpty(Model.Specialization))
+    {
+        <div class="mb-3 d-flex align-items-center gap-2 small">
+            <span class="text-muted">Showing results for:</span>
+            @if (!string.IsNullOrEmpty(Model.SearchTerm))
+            {
+                <span class="badge bg-primary text-white">Keyword: "@Model.SearchTerm"</span>
+            }
+            @if (!string.IsNullOrEmpty(Model.Specialization))
+            {
+                <span class="badge bg-teal text-white">Department: @Model.Specialization</span>
+            }
+            <span class="text-muted ms-2">(@Model.Doctors.Count() doctors found)</span>
+        </div>
+    }
+
+    <!-- Doctors Cards Grid -->
+    @if (!Model.Doctors.Any())
+    {
+        <div class="text-center py-5 bg-white rounded-4 shadow-sm border p-4">
+            <div class="mb-3 text-muted display-4"><i class="bi bi-search"></i></div>
+            <h4 class="fw-bold">No Doctors Found</h4>
+            <p class="text-muted">No specialists matched your current search criteria. Try removing filters.</p>
+            <a asp-controller="Doctors" asp-action="Index" class="btn btn-primary rounded-pill">View All Doctors</a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var doctor in Model.Doctors)
+            {
+                <div class="col-xl-4 col-md-6">
+                    <div class="doctor-card">
+                        <div class="doctor-img-container">
+                            <img src="@(string.IsNullOrEmpty(doctor.ProfilePictureUrl) ? "/images/doctors/default-doctor.svg" : doctor.ProfilePictureUrl)" 
+                                 alt="@doctor.Name" class="doctor-img" />
+                        </div>
+                        <div class="doctor-info">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-teal-subtle text-teal fw-semibold">@doctor.Specialization</span>
+                                <span class="badge bg-light text-secondary border">@doctor.Experience Years Exp.</span>
+                            </div>
+                            
+                            <h4 class="fw-bold mb-1">@doctor.Name</h4>
+                            
+                            <p class="text-muted small mb-3 flex-grow-1" style="min-height: 48px;">
+                                @(string.IsNullOrEmpty(doctor.Bio) ? "Experienced specialist providing comprehensive diagnosis and clinical care." : doctor.Bio)
+                            </p>
+
+                            <ul class="list-unstyled small mb-3 border-top pt-2">
+                                <li class="d-flex justify-content-between py-1">
+                                    <span class="text-muted"><i class="bi bi-calendar-check text-primary me-2"></i>Available Days:</span>
+                                    <span class="fw-semibold">@doctor.AvailableDays</span>
+                                </li>
+                                <li class="d-flex justify-content-between py-1">
+                                    <span class="text-muted"><i class="bi bi-cash-stack text-teal me-2"></i>Consultation Fee:</span>
+                                    <span class="fw-bold text-primary fs-6">₹@doctor.ConsultationFee.ToString("N0")</span>
+                                </li>
+                            </ul>
+
+                            <div class="d-grid mt-auto">
+                                <a asp-controller="Appointments" asp-action="Book" asp-route-doctorId="@doctor.Id" class="btn btn-primary rounded-pill">
+                                    <i class="bi bi-calendar-plus me-1"></i> Book Appointment
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

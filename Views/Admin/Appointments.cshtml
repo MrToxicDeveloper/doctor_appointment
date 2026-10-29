@@ -1,0 +1,172 @@
+@model IEnumerable<MediCare.Models.Appointment>
+@{
+    ViewData["Title"] = "All Appointments";
+    var currentStatus = ViewBag.CurrentStatus as string ?? "All";
+    var searchTerm = ViewBag.SearchTerm as string ?? "";
+}
+
+<div class="bg-dark text-white py-4 mb-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-1 small text-white-50">
+                        <li class="breadcrumb-item"><a asp-action="Index" class="text-white text-decoration-none">Dashboard</a></li>
+                        <li class="breadcrumb-item active text-white" aria-current="page">Appointments</li>
+                    </ol>
+                </nav>
+                <h2 class="fw-bold mb-0">All Clinic Appointments</h2>
+            </div>
+            <a asp-action="Index" class="btn btn-outline-light rounded-pill">
+                <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <!-- Search and Filter Bar -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white">
+        <form method="get" asp-action="Appointments" class="row g-2 align-items-center">
+            <input type="hidden" name="status" value="@currentStatus" />
+            <div class="col-md-8 col-lg-9">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="search" class="form-control border-start-0 bg-light" 
+                           placeholder="Search by patient name, email, phone number, or doctor name..." value="@searchTerm" />
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-1 rounded-pill">
+                    <i class="bi bi-search me-1"></i> Search
+                </button>
+                @if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    <a asp-action="Appointments" asp-route-status="@currentStatus" class="btn btn-outline-secondary rounded-pill">
+                        Clear
+                    </a>
+                }
+            </div>
+        </form>
+    </div>
+
+    <!-- Status Tabs -->
+    <ul class="nav nav-pills mb-3 gap-2">
+        <li class="nav-item">
+            <a class="nav-link rounded-pill @(currentStatus == "All" ? "active bg-primary" : "bg-white text-dark border")" 
+               asp-action="Appointments" asp-route-status="All" asp-route-search="@searchTerm">All</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link rounded-pill @(currentStatus == "Pending" ? "active bg-warning text-dark" : "bg-white text-dark border")" 
+               asp-action="Appointments" asp-route-status="Pending" asp-route-search="@searchTerm">Pending</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link rounded-pill @(currentStatus == "Confirmed" ? "active bg-success" : "bg-white text-dark border")" 
+               asp-action="Appointments" asp-route-status="Confirmed" asp-route-search="@searchTerm">Confirmed</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link rounded-pill @(currentStatus == "Cancelled" ? "active bg-danger" : "bg-white text-dark border")" 
+               asp-action="Appointments" asp-route-status="Cancelled" asp-route-search="@searchTerm">Cancelled</a>
+        </li>
+    </ul>
+
+    <!-- Appointments Table -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">ID</th>
+                        <th>Patient Information</th>
+                        <th>Assigned Doctor</th>
+                        <th>Date & Time</th>
+                        <th>Reason for Visit</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox display-6 d-block mb-2"></i>
+                                No appointments found matching your search.
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var appt in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold text-primary">#MED-@appt.Id.ToString("D4")</td>
+                            <td>
+                                <div class="fw-bold">@appt.PatientName</div>
+                                <div class="small text-muted">
+                                    <i class="bi bi-envelope me-1"></i>@appt.PatientEmail
+                                </div>
+                                <div class="small text-muted">
+                                    <i class="bi bi-telephone me-1"></i>@appt.PatientPhone
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fw-semibold">@appt.Doctor?.Name</div>
+                                <small class="text-teal">@appt.Doctor?.Specialization</small>
+                            </td>
+                            <td>
+                                <div class="fw-semibold">@appt.AppointmentDate.ToString("dd MMM yyyy")</div>
+                                <small class="text-muted"><i class="bi bi-clock me-1"></i>@appt.AppointmentTime</small>
+                            </td>
+                            <td>
+                                <span class="small d-inline-block text-truncate" style="max-width: 200px;" title="@appt.Reason">
+                                    @appt.Reason
+                                </span>
+                            </td>
+                            <td>
+                                @if (appt.Status == "Confirmed")
+                                {
+                                    <span class="badge badge-status-confirmed"><i class="bi bi-check-circle me-1"></i>Confirmed</span>
+                                }
+                                else if (appt.Status == "Cancelled")
+                                {
+                                    <span class="badge badge-status-cancelled"><i class="bi bi-x-circle me-1"></i>Cancelled</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-status-pending"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group btn-group-sm">
+                                    @if (appt.Status != "Confirmed")
+                                    {
+                                        <form asp-action="UpdateAppointmentStatus" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@appt.Id" />
+                                            <input type="hidden" name="newStatus" value="Confirmed" />
+                                            <input type="hidden" name="returnAction" value="Appointments" />
+                                            <button type="submit" class="btn btn-outline-success btn-sm rounded-start">
+                                                Confirm
+                                            </button>
+                                        </form>
+                                    }
+                                    @if (appt.Status != "Cancelled")
+                                    {
+                                        <form asp-action="UpdateAppointmentStatus" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@appt.Id" />
+                                            <input type="hidden" name="newStatus" value="Cancelled" />
+                                            <input type="hidden" name="returnAction" value="Appointments" />
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-end">
+                                                Cancel
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

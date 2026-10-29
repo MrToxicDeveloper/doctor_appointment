@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <rect width="300" height="300" fill="#f0fdf4" rx="16"/>
+  <!-- Hair (Female) -->
+  <path d="M95 120 C85 60, 215 60, 205 120 C220 180, 215 220, 210 230 C195 210, 195 180, 190 150 C185 100, 115 100, 110 150 C105 180, 105 210, 90 230 C85 220, 80 180, 95 120 Z" fill="#3f2e22" />
+  <!-- Face -->
+  <circle cx="150" cy="115" r="48" fill="#fed7aa" />
+  <!-- Hair front -->
+  <path d="M102 110 Q150 70 198 110 Q150 90 102 110 Z" fill="#291e16" />
+  <!-- Face details -->
+  <circle cx="135" cy="115" r="4" fill="#0f172a" />
+  <circle cx="165" cy="115" r="4" fill="#0f172a" />
+  <!-- Smile with soft blush -->
+  <circle cx="126" cy="122" r="5" fill="#fca5a5" opacity="0.6"/>
+  <circle cx="174" cy="122" r="5" fill="#fca5a5" opacity="0.6"/>
+  <path d="M142 128 Q150 137 158 128" stroke="#be123c" stroke-width="2.5" fill="none" stroke-linecap="round" />
+  <!-- Doctor Coat -->
+  <path d="M70 270 L95 175 Q150 185 205 175 L230 270 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+  <!-- Inner Scrub Top (Teal) -->
+  <polygon points="130,175 170,175 160,225 140,225" fill="#0d9488" />
+  <!-- Stethoscope (Pink/Coral) -->
+  <path d="M125 180 C125 225, 175 225, 175 180" fill="none" stroke="#e11d48" stroke-width="4" stroke-linecap="round" />
+  <path d="M150 213 L150 235" stroke="#e11d48" stroke-width="4" />
+  <circle cx="150" cy="240" r="8" fill="#cbd5e1" stroke="#e11d48" stroke-width="2" />
+  <!-- Lapels -->
+  <polygon points="95,175 130,175 135,240 115,220" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
+  <polygon points="205,175 170,175 165,240 185,220" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
+</svg>

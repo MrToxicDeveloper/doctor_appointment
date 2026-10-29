@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <rect width="300" height="300" fill="#fef3c7" rx="16"/>
+  <!-- Hair (Ponytail/Medium) -->
+  <circle cx="150" cy="115" r="52" fill="#18181b" />
+  <!-- Face -->
+  <circle cx="150" cy="118" r="46" fill="#fed7aa" />
+  <!-- Hair bangs -->
+  <path d="M104 110 Q140 85 196 110 Q150 95 104 110 Z" fill="#18181b" />
+  <!-- Eyes -->
+  <circle cx="134" cy="118" r="4" fill="#0f172a" />
+  <circle cx="166" cy="118" r="4" fill="#0f172a" />
+  <!-- Smile -->
+  <path d="M140 130 Q150 140 160 130" stroke="#b91c1c" stroke-width="2.5" fill="none" stroke-linecap="round" />
+  <!-- Doctor Coat -->
+  <path d="M70 270 L95 175 Q150 185 205 175 L230 270 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+  <!-- Inner shirt (Yellow/Orange) -->
+  <polygon points="130,175 170,175 160,225 140,225" fill="#f59e0b" />
+  <!-- Stethoscope (Green) -->
+  <path d="M125 180 C125 225, 175 225, 175 180" fill="none" stroke="#16a34a" stroke-width="4" stroke-linecap="round" />
+  <path d="M150 213 L150 235" stroke="#16a34a" stroke-width="4" />
+  <circle cx="150" cy="240" r="8" fill="#86efac" stroke="#15803d" stroke-width="2" />
+  <!-- Lapels -->
+  <polygon points="95,175 130,175 135,240 115,220" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
+  <polygon points="205,175 170,175 165,240 185,220" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
+</svg>

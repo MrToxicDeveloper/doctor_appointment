@@ -1,0 +1,204 @@
+@model MediCare.ViewModels.MyAppointmentsViewModel
+@{
+    ViewData["Title"] = "My Appointments";
+}
+
+<div class="bg-primary-subtle py-4 border-bottom">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h2 class="fw-bold text-dark mb-1">My Appointments</h2>
+                <p class="text-muted mb-0">Search, review, and manage your booked clinical consultations using your email.</p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a asp-controller="Appointments" asp-action="Book" class="btn btn-primary rounded-pill">
+                    <i class="bi bi-calendar-plus me-1"></i> Book New Appointment
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <!-- Email Lookup Card -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+        <form method="get" asp-controller="Appointments" asp-action="MyAppointments" class="row g-2 align-items-end">
+            <div class="col-md-8 col-lg-9">
+                <label asp-for="Email" class="form-label fw-bold">
+                    <i class="bi bi-envelope text-primary me-1"></i> Find Appointments by Patient Email:
+                </label>
+                <input asp-for="Email" class="form-control" type="email" placeholder="Enter the email address used during booking (e.g. ananya.iyer@example.com)" required />
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <button type="submit" class="btn btn-primary w-100 rounded-pill">
+                    <i class="bi bi-search me-1"></i> View Appointments
+                </button>
+            </div>
+        </form>
+
+        @if (!Model.HasSearched)
+        {
+            <div class="mt-3 p-3 bg-light rounded-3 small text-muted">
+                <i class="bi bi-lightbulb text-warning me-1"></i> <strong>Tip for Demo:</strong> 
+                Try searching with seeded demo email: <code>ananya.iyer@example.com</code> or <code>rohan.das@example.com</code>.
+            </div>
+        }
+    </div>
+
+    <!-- Results Display -->
+    @if (Model.HasSearched)
+    {
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">
+                Appointments for <span class="text-primary">@Model.Email</span>
+            </h5>
+            <span class="badge bg-secondary">@Model.Appointments.Count record(s)</span>
+        </div>
+
+        @if (!Model.Appointments.Any())
+        {
+            <div class="text-center py-5 bg-white rounded-4 shadow-sm border p-4">
+                <div class="text-muted display-4 mb-3"><i class="bi bi-calendar-x"></i></div>
+                <h5 class="fw-bold">No Appointments Found</h5>
+                <p class="text-muted small">No scheduled appointments were found under email "<strong>@Model.Email</strong>".</p>
+                <a asp-controller="Appointments" asp-action="Book" class="btn btn-primary rounded-pill">
+                    Book Your First Appointment
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" class="ps-4">Booking ID</th>
+                                <th scope="col">Doctor</th>
+                                <th scope="col">Patient Name</th>
+                                <th scope="col">Date & Time</th>
+                                <th scope="col">Reason</th>
+                                <th scope="col">Status</th>
+                                <th scope="col" class="text-end pe-4">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var appt in Model.Appointments)
+                            {
+                                var isPast = appt.AppointmentDate.Date < DateTime.Today;
+                                var canCancel = !isPast && appt.Status != "Cancelled";
+
+                                <tr>
+                                    <td class="ps-4 fw-bold text-primary">
+                                        #MED-@appt.Id.ToString("D4")
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold">@appt.Doctor?.Name</div>
+                                        <small class="text-muted">@appt.Doctor?.Specialization (₹@appt.Doctor?.ConsultationFee.ToString("N0"))</small>
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold">@appt.PatientName</div>
+                                        <small class="text-muted"><i class="bi bi-telephone me-1"></i>@appt.PatientPhone</small>
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold">
+                                            <i class="bi bi-calendar-event text-primary me-1"></i>@appt.AppointmentDate.ToString("dd MMM yyyy")
+                                        </div>
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock text-teal me-1"></i>@appt.AppointmentTime
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <span class="small text-truncate d-inline-block" style="max-width: 200px;" title="@appt.Reason">
+                                            @appt.Reason
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if (appt.Status == "Confirmed")
+                                        {
+                                            <span class="badge badge-status-confirmed">
+                                                <i class="bi bi-check-circle me-1"></i>Confirmed
+                                            </span>
+                                        }
+                                        else if (appt.Status == "Cancelled")
+                                        {
+                                            <span class="badge badge-status-cancelled">
+                                                <i class="bi bi-x-circle me-1"></i>Cancelled
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-status-pending">
+                                                <i class="bi bi-hourglass-split me-1"></i>Pending
+                                            </span>
+                                        }
+
+                                        @if (isPast)
+                                        {
+                                            <span class="badge bg-light text-muted border ms-1">Past</span>
+                                        }
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        @if (canCancel)
+                                        {
+                                            <!-- Button triggers modal confirmation -->
+                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill" 
+                                                    data-bs-toggle="modal" data-bs-target="#cancelModal-@appt.Id">
+                                                <i class="bi bi-x-circle me-1"></i> Cancel
+                                            </button>
+
+                                            <!-- Modal Confirmation -->
+                                            <div class="modal fade" id="cancelModal-@appt.Id" tabindex="-1" aria-labelledby="cancelModalLabel-@appt.Id" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content text-start">
+                                                        <div class="modal-header bg-danger text-white">
+                                                            <h5 class="modal-title" id="cancelModalLabel-@appt.Id">
+                                                                <i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm Cancellation
+                                                            </h5>
+                                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Are you sure you want to cancel the following appointment?</p>
+                                                            <div class="bg-light p-3 rounded-3 small">
+                                                                <div><strong>Booking ID:</strong> #MED-@appt.Id.ToString("D4")</div>
+                                                                <div><strong>Doctor:</strong> @appt.Doctor?.Name (@appt.Doctor?.Specialization)</div>
+                                                                <div><strong>Date & Time:</strong> @appt.AppointmentDate.ToString("dd MMM yyyy") at @appt.AppointmentTime</div>
+                                                                <div><strong>Patient:</strong> @appt.PatientName</div>
+                                                            </div>
+                                                            <p class="text-muted small mt-2 mb-0">
+                                                                <i class="bi bi-info-circle me-1"></i> This will mark your appointment status as <strong>Cancelled</strong> in the database.
+                                                            </p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Keep Appointment</button>
+                                                            <form asp-controller="Appointments" asp-action="Cancel" method="post" class="d-inline">
+                                                                @Html.AntiForgeryToken()
+                                                                <input type="hidden" name="id" value="@appt.Id" />
+                                                                <input type="hidden" name="returnEmail" value="@Model.Email" />
+                                                                <button type="submit" class="btn btn-danger rounded-pill">
+                                                                    Yes, Cancel Appointment
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (appt.Status == "Cancelled")
+                                        {
+                                            <span class="text-muted small fst-italic">Cancelled</span>
+                                        }
+                                        else if (isPast)
+                                        {
+                                            <span class="text-muted small fst-italic">Completed</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+</div>

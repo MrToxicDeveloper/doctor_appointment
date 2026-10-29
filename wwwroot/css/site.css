@@ -1,0 +1,307 @@
+/* ==========================================================================
+   MediCare - Healthcare Website Stylesheet
+   Theme: Crisp White with Hospital Blue & Medical Teal Accents
+   ========================================================================== */
+
+:root {
+    --primary-color: #0d6efd;
+    --primary-hover: #0b5ed7;
+    --primary-light: #e0f2fe;
+    --teal-color: #0d9488;
+    --teal-hover: #0f766e;
+    --teal-light: #ccfbf1;
+    --dark-navy: #0f172a;
+    --text-muted-custom: #64748b;
+    --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    --card-hover-shadow: 0 20px 30px -10px rgba(13, 110, 253, 0.15);
+    --border-radius: 12px;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    color: #1e293b;
+    background-color: #f8fafc;
+    overflow-x: hidden;
+}
+
+/* Colors */
+.text-teal {
+    color: var(--teal-color) !important;
+}
+
+.bg-teal {
+    background-color: var(--teal-color) !important;
+    color: #fff;
+}
+
+.bg-teal-subtle {
+    background-color: var(--teal-light) !important;
+    color: var(--teal-color) !important;
+}
+
+.brand-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 1.25rem;
+}
+
+/* Navigation Links */
+.navbar .nav-link {
+    color: #334155;
+    transition: color 0.2s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: var(--primary-color) !important;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+    padding: 70px 0 90px 0;
+    position: relative;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #0f172a;
+}
+
+.hero-subtitle {
+    font-size: 1.15rem;
+    color: #475569;
+    line-height: 1.6;
+}
+
+/* Doctor Cards */
+.doctor-card {
+    background: #ffffff;
+    border-radius: var(--border-radius);
+    border: 1px solid #e2e8f0;
+    box-shadow: var(--card-shadow);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.doctor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-hover-shadow);
+    border-color: #bfdbfe;
+}
+
+.doctor-img-container {
+    height: 220px;
+    background: #f1f5f9;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+}
+
+.doctor-img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.doctor-card:hover .doctor-img {
+    transform: scale(1.04);
+}
+
+.doctor-info {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Feature & Step Cards */
+.step-card {
+    background: #ffffff;
+    border-radius: var(--border-radius);
+    border: 1px solid #e2e8f0;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.25s ease;
+}
+
+.step-card:hover {
+    transform: translateY(-4px);
+    border-color: #93c5fd;
+}
+
+.step-number {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    font-weight: 700;
+    background: var(--primary-light);
+    color: var(--primary-color);
+    margin-bottom: 1.25rem;
+}
+
+/* Status Badges */
+.badge-status-confirmed {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.badge-status-pending {
+    background-color: #fef9c3;
+    color: #854d0e;
+    border: 1px solid #fef08a;
+}
+
+.badge-status-cancelled {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+/* Form Styling */
+.form-card {
+    background: #ffffff;
+    border-radius: var(--border-radius);
+    border: 1px solid #e2e8f0;
+    box-shadow: var(--card-shadow);
+    padding: 2.25rem;
+}
+
+.form-control, .form-select {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1.5px solid #cbd5e1;
+    font-size: 0.95rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.4rem;
+}
+
+/* Buttons */
+.btn {
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.65rem 1.35rem;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.btn-teal {
+    background-color: var(--teal-color);
+    border-color: var(--teal-color);
+    color: #ffffff;
+}
+
+.btn-teal:hover {
+    background-color: var(--teal-hover);
+    border-color: var(--teal-hover);
+    color: #ffffff;
+}
+
+/* Social Badges in Footer */
+.social-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #1e293b;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.social-badge:hover {
+    background: var(--primary-color);
+    color: #ffffff;
+}
+
+.footer-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+    padding-left: 4px;
+}
+
+/* Receipt Card */
+.receipt-card {
+    max-width: 650px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 2px dashed #93c5fd;
+    box-shadow: var(--card-shadow);
+    padding: 2.5rem;
+}
+
+/* Dashboard Summary Cards */
+.stat-card {
+    background: #ffffff;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.stat-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    .form-card {
+        padding: 1.5rem;
+    }
+    .top-bar {
+        font-size: 0.75rem;
+    }
+}

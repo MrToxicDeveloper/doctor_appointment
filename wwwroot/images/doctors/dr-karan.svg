@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <rect width="300" height="300" fill="#f1f5f9" rx="16"/>
+  <!-- Hair (Trimmed short) -->
+  <path d="M102 105 Q150 60 198 105 Q195 75 150 70 Q105 75 102 105 Z" fill="#0f172a" />
+  <!-- Face -->
+  <circle cx="150" cy="115" r="48" fill="#fbcfe8" />
+  <!-- Eyes -->
+  <circle cx="135" cy="114" r="4" fill="#0f172a" />
+  <circle cx="165" cy="114" r="4" fill="#0f172a" />
+  <!-- Beard trim -->
+  <path d="M118 115 C118 155, 182 155, 182 115 C182 145, 175 160, 150 160 C125 160, 118 145, 118 115 Z" fill="#334155" opacity="0.35"/>
+  <path d="M142 130 Q150 137 158 130" stroke="#831843" stroke-width="2.5" fill="none" stroke-linecap="round" />
+  <!-- Doctor Coat -->
+  <path d="M70 270 L95 175 Q150 185 205 175 L230 270 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+  <!-- Inner shirt (Navy) -->
+  <polygon points="135,175 165,175 155,225 145,225" fill="#1e293b" />
+  <!-- Stethoscope (Dark Gray) -->
+  <path d="M125 180 C125 220, 175 220, 175 180" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round" />
+  <path d="M150 207 L150 230" stroke="#334155" stroke-width="4" />
+  <circle cx="150" cy="235" r="8" fill="#94a3b8" stroke="#334155" stroke-width="2" />
+  <!-- Lapels -->
+  <polygon points="95,175 135,175 140,240 115,220" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
+  <polygon points="205,175 165,175 160,240 185,220" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
+</svg>

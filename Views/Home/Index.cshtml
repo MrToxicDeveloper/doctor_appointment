@@ -1,0 +1,195 @@
+@model IEnumerable<MediCare.Models.Doctor>
+@{
+    ViewData["Title"] = "Your Health, Our Priority";
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-semibold mb-3">
+                    <i class="bi bi-shield-check me-1"></i> Certified & Trusted Healthcare Network
+                </span>
+                <h1 class="hero-title mb-4">
+                    Your Health, <br />
+                    <span class="text-primary">Our Priority</span>
+                </h1>
+                <p class="hero-subtitle mb-4">
+                    Connect with qualified doctors, schedule hassle-free appointments online, and receive personalized medical care when you need it most.
+                </p>
+                
+                <div class="d-flex flex-wrap gap-3 mb-5">
+                    <a asp-controller="Appointments" asp-action="Book" class="btn btn-primary btn-lg px-4 rounded-pill shadow-sm">
+                        <i class="bi bi-calendar-check me-2"></i> Book Appointment
+                    </a>
+                    <a asp-controller="Doctors" asp-action="Index" class="btn btn-outline-secondary btn-lg px-4 rounded-pill">
+                        <i class="bi bi-people me-2"></i> Browse All Doctors
+                    </a>
+                </div>
+
+                <!-- Trust Stats -->
+                <div class="row g-3 pt-3 border-top border-secondary-subtle">
+                    <div class="col-4">
+                        <h4 class="fw-bold text-dark mb-0">@(ViewBag.TotalDoctors ?? 5)+</h4>
+                        <small class="text-muted">Specialist Doctors</small>
+                    </div>
+                    <div class="col-4 border-start ps-3">
+                        <h4 class="fw-bold text-dark mb-0">100%</h4>
+                        <small class="text-muted">Verified Profiles</small>
+                    </div>
+                    <div class="col-4 border-start ps-3">
+                        <h4 class="fw-bold text-dark mb-0">24/7</h4>
+                        <small class="text-muted">Online Booking</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Illustration / Doctor Card Spotlight -->
+            <div class="col-lg-5 text-center">
+                <div class="position-relative d-inline-block">
+                    <div class="bg-white p-4 rounded-4 shadow-lg border text-start" style="max-width: 380px;">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <img src="/images/doctors/dr-rahul.svg" alt="Doctor" class="rounded-circle border" style="width: 64px; height: 64px; object-fit: cover;">
+                            <div>
+                                <h6 class="fw-bold mb-1">Dr. Rahul Sharma</h6>
+                                <span class="badge bg-teal-subtle text-teal">Cardiologist</span>
+                            </div>
+                        </div>
+                        <p class="small text-muted mb-3">
+                            "Specialized cardiac diagnostics and preventive heart health management."
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center py-2 px-3 bg-light rounded-3 mb-3 small">
+                            <span class="text-muted"><i class="bi bi-calendar-event me-1 text-primary"></i> Mon - Fri</span>
+                            <span class="fw-bold text-primary">₹800 Fee</span>
+                        </div>
+                        <a asp-controller="Appointments" asp-action="Book" asp-route-doctorId="1" class="btn btn-primary w-100 rounded-pill btn-sm">
+                            <i class="bi bi-clock me-1"></i> Book Next Available Slot
+                        </a>
+                    </div>
+                    <div class="position-absolute bottom-0 start-0 translate-middle-x bg-white p-3 rounded-3 shadow border d-none d-md-flex align-items-center gap-2">
+                        <div class="bg-success text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                            <i class="bi bi-check-lg"></i>
+                        </div>
+                        <div class="text-start">
+                            <div class="fw-bold small">Instant Confirmation</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">No waiting queues</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Doctors Section -->
+<section class="py-5 bg-white">
+    <div class="container py-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+            <div>
+                <span class="text-teal text-uppercase fw-bold small tracking-wider">Meet Our Specialists</span>
+                <h2 class="fw-bold mt-1 mb-0">Featured Doctors</h2>
+            </div>
+            <a asp-controller="Doctors" asp-action="Index" class="btn btn-outline-primary rounded-pill mt-2 mt-md-0">
+                View All Doctors <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var doctor in Model)
+            {
+                <div class="col-lg-3 col-md-6">
+                    <div class="doctor-card">
+                        <div class="doctor-img-container">
+                            <img src="@(string.IsNullOrEmpty(doctor.ProfilePictureUrl) ? "/images/doctors/default-doctor.svg" : doctor.ProfilePictureUrl)" 
+                                 alt="@doctor.Name" class="doctor-img" />
+                        </div>
+                        <div class="doctor-info">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-teal-subtle text-teal">@doctor.Specialization</span>
+                                <span class="badge bg-light text-secondary border">@doctor.Experience yrs exp</span>
+                            </div>
+                            <h5 class="fw-bold mb-1">@doctor.Name</h5>
+                            <p class="text-muted small mb-3 flex-grow-1" style="min-height: 40px;">
+                                @(string.IsNullOrEmpty(doctor.Bio) ? "Dedicated clinical practitioner committed to patient well-being." : doctor.Bio)
+                            </p>
+                            
+                            <div class="border-top pt-2 mt-auto">
+                                <div class="d-flex justify-content-between align-items-center mb-3 small">
+                                    <span class="text-muted"><i class="bi bi-calendar3 me-1"></i> @doctor.AvailableDays</span>
+                                    <span class="fw-bold text-primary fs-6">₹@doctor.ConsultationFee.ToString("N0")</span>
+                                </div>
+                                <a asp-controller="Appointments" asp-action="Book" asp-route-doctorId="@doctor.Id" class="btn btn-primary w-100 rounded-pill">
+                                    <i class="bi bi-calendar-plus me-1"></i> Book Appointment
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-light">
+    <div class="container py-3">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="text-teal text-uppercase fw-bold small">Seamless Experience</span>
+            <h2 class="fw-bold mt-1">How It Works</h2>
+            <p class="text-muted">Book your medical appointment in three straightforward steps.</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Step 1 -->
+            <div class="col-md-4">
+                <div class="step-card h-100">
+                    <div class="step-number">1</div>
+                    <h5 class="fw-bold mb-2">Find Your Doctor</h5>
+                    <p class="text-muted small mb-0">
+                        Search and filter certified specialists by medical department, years of experience, and consultation fees.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="col-md-4">
+                <div class="step-card h-100">
+                    <div class="step-number">2</div>
+                    <h5 class="fw-bold mb-2">Select Date & Time</h5>
+                    <p class="text-muted small mb-0">
+                        Pick an available calendar date and an open consultation time slot that fits your personal schedule.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="col-md-4">
+                <div class="step-card h-100">
+                    <div class="step-number">3</div>
+                    <h5 class="fw-bold mb-2">Instant Confirmation</h5>
+                    <p class="text-muted small mb-0">
+                        Receive your digital appointment receipt immediately and track or manage bookings anytime under "My Appointments".
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="py-5 bg-primary text-white">
+    <div class="container py-3">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8 text-center text-lg-start">
+                <h3 class="fw-bold mb-2">Ready to prioritize your health today?</h3>
+                <p class="mb-0 text-white-50">Our team of experienced healthcare professionals is here to support you at every step.</p>
+            </div>
+            <div class="col-lg-4 text-center text-lg-end">
+                <a asp-controller="Appointments" asp-action="Book" class="btn btn-light btn-lg px-4 text-primary fw-bold rounded-pill shadow">
+                    <i class="bi bi-calendar2-check me-2"></i> Book Appointment Now
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

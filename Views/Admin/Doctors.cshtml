@@ -1,0 +1,142 @@
+@model IEnumerable<MediCare.Models.Doctor>
+@{
+    ViewData["Title"] = "Manage Doctors";
+}
+
+<div class="bg-dark text-white py-4 mb-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-1 small text-white-50">
+                        <li class="breadcrumb-item"><a asp-action="Index" class="text-white text-decoration-none">Dashboard</a></li>
+                        <li class="breadcrumb-item active text-white" aria-current="page">Doctors</li>
+                    </ol>
+                </nav>
+                <h2 class="fw-bold mb-0">Doctor Roster & Management</h2>
+            </div>
+            <a asp-action="CreateDoctor" class="btn btn-primary rounded-pill">
+                <i class="bi bi-person-plus me-1"></i> Add New Doctor
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Doctor</th>
+                        <th>Specialization</th>
+                        <th>Experience</th>
+                        <th>Consultation Fee</th>
+                        <th>Available Days</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var doctor in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="@(string.IsNullOrEmpty(doctor.ProfilePictureUrl) ? "/images/doctors/default-doctor.svg" : doctor.ProfilePictureUrl)" 
+                                         alt="@doctor.Name" class="rounded-circle border" style="width: 48px; height: 48px; object-fit: cover;">
+                                    <div>
+                                        <div class="fw-bold text-dark">@doctor.Name</div>
+                                        <small class="text-muted">ID: #DOC-@doctor.Id</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-teal-subtle text-teal">@doctor.Specialization</span>
+                            </td>
+                            <td>
+                                <span class="fw-semibold">@doctor.Experience yrs</span>
+                            </td>
+                            <td>
+                                <strong class="text-primary">₹@doctor.ConsultationFee.ToString("N0")</strong>
+                            </td>
+                            <td>
+                                <small class="text-muted"><i class="bi bi-calendar3 me-1"></i>@doctor.AvailableDays</small>
+                            </td>
+                            <td>
+                                @if (doctor.IsActive)
+                                {
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                        <i class="bi bi-check-circle me-1"></i>Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
+                                        <i class="bi bi-dash-circle me-1"></i>Inactive
+                                    </span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group btn-group-sm">
+                                    <!-- Edit -->
+                                    <a asp-action="EditDoctor" asp-route-id="@doctor.Id" class="btn btn-outline-primary" title="Edit Doctor Details">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+
+                                    <!-- Toggle Active -->
+                                    <form asp-action="ToggleDoctorActive" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@doctor.Id" />
+                                        <button type="submit" class="btn btn-outline-secondary" title="@(doctor.IsActive ? "Deactivate Doctor" : "Activate Doctor")">
+                                            <i class="bi @(doctor.IsActive ? "bi-eye-slash" : "bi-eye")"></i>
+                                        </button>
+                                    </form>
+
+                                    <!-- Safe Delete with Modal -->
+                                    <button type="button" class="btn btn-outline-danger" 
+                                            data-bs-toggle="modal" data-bs-target="#deleteDocModal-@doctor.Id" title="Delete Doctor">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Delete Confirmation Modal -->
+                                <div class="modal fade" id="deleteDocModal-@doctor.Id" tabindex="-1" aria-labelledby="deleteDocModalLabel-@doctor.Id" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered text-start">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger text-white">
+                                                <h5 class="modal-title" id="deleteDocModalLabel-@doctor.Id">
+                                                    <i class="bi bi-shield-exclamation me-2"></i> Confirm Doctor Removal
+                                                </h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete <strong>@doctor.Name</strong>?</p>
+                                                
+                                                <div class="alert alert-warning small border mb-0">
+                                                    <i class="bi bi-info-circle-fill me-1"></i> <strong>Safe Integrity Policy:</strong><br />
+                                                    &bull; If this doctor has <em>active upcoming appointments</em>, deletion will be blocked.<br />
+                                                    &bull; If this doctor has <em>past appointment history</em>, they will be safely deactivated to protect medical records.
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                                                <form asp-action="DeleteDoctor" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@doctor.Id" />
+                                                    <button type="submit" class="btn btn-danger rounded-pill">
+                                                        Proceed with Delete
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

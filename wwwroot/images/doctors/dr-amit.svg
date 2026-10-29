@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <rect width="300" height="300" fill="#eff6ff" rx="16"/>
+  <!-- Hair (Salt & Pepper) -->
+  <path d="M98 105 Q150 50 202 105 Q195 65 150 60 Q105 65 98 105 Z" fill="#64748b" />
+  <!-- Face -->
+  <circle cx="150" cy="115" r="50" fill="#fde047" />
+  <!-- Glasses -->
+  <rect x="120" y="105" width="25" height="18" rx="4" fill="none" stroke="#334155" stroke-width="3"/>
+  <rect x="155" y="105" width="25" height="18" rx="4" fill="none" stroke="#334155" stroke-width="3"/>
+  <line x1="145" y1="114" x2="155" y2="114" stroke="#334155" stroke-width="3"/>
+  <line x1="110" y1="112" x2="120" y2="112" stroke="#334155" stroke-width="3"/>
+  <line x1="180" y1="112" x2="190" y2="112" stroke="#334155" stroke-width="3"/>
+  <!-- Eyes inside glasses -->
+  <circle cx="132" cy="114" r="3.5" fill="#0f172a" />
+  <circle cx="167" cy="114" r="3.5" fill="#0f172a" />
+  <!-- Gentle smile -->
+  <path d="M140 132 Q150 140 160 132" stroke="#92400e" stroke-width="2.5" fill="none" stroke-linecap="round" />
+  <!-- Doctor Coat -->
+  <path d="M70 270 L95 175 Q150 185 205 175 L230 270 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+  <!-- Shirt & Tie -->
+  <polygon points="135,175 165,175 155,225 145,225" fill="#3b82f6" />
+  <polygon points="146,180 154,180 158,210 150,230 142,210" fill="#1e3a8a" />
+  <!-- Stethoscope (Blue) -->
+  <path d="M125 180 C125 220, 175 220, 175 180" fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round" />
+  <path d="M150 207 L150 230" stroke="#2563eb" stroke-width="4" />
+  <circle cx="150" cy="235" r="8" fill="#93c5fd" stroke="#1d4ed8" stroke-width="2" />
+  <!-- Lapels -->
+  <polygon points="95,175 135,175 140,240 115,220" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
+  <polygon points="205,175 165,175 160,240 185,220" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
+</svg>
